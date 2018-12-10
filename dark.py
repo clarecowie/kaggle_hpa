@@ -30,7 +30,7 @@ class ResLayer(nn.Module):
         "create ResLayer with `ni` inputs"
         super().__init__()
         self.conv1=conv_layer(ni, ni//2, ks=1)
-        self.conv2=conv_layer(ni//2, ni, ks=3)
+        self.conv2=conv_layer(ni//2, ni, ks=3, self_attention=True)
 
     def forward(self, x): return x + self.conv2(self.conv1(x))
 
