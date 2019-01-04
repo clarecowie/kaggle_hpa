@@ -2,24 +2,24 @@
 from fastai import *
 from fastai.vision import *
 import numpy as np
-import cv2
+# import cv2
 import torch
 import torch.nn as nn
 import torch.nn.functional as F
 
 
-def open_image4d(path:PathOrStr)->Image:
-    '''open RGBA image from 4 different 1-channel files.
-    return: numpy array [4, sz, sz]'''
-    path=str(path)
-    flags = cv2.IMREAD_GRAYSCALE
-    red = cv2.imread(path+ '_red.png', flags)
-    blue = cv2.imread(path+ '_blue.png', flags)
-    green = cv2.imread(path+ '_green.png', flags)
-    yellow = cv2.imread(path+ '_yellow.png', flags)
-    im = np.stack(([red, green, blue, yellow]))
+# def open_image4d(path:PathOrStr)->Image:
+#     '''open RGBA image from 4 different 1-channel files.
+#     return: numpy array [4, sz, sz]'''
+#     path=str(path)
+#     flags = cv2.IMREAD_GRAYSCALE
+#     red = cv2.imread(path+ '_red.png', flags)
+#     blue = cv2.imread(path+ '_blue.png', flags)
+#     green = cv2.imread(path+ '_green.png', flags)
+#     yellow = cv2.imread(path+ '_yellow.png', flags)
+#     im = np.stack(([red, green, blue, yellow]))
 
-    return Image(Tensor(im/255).float())
+#     return Image(Tensor(im/255).float())
 
 # def open_image4d(path:PathOrStr)->Image:
 #     '''open RGBA image from a single 4-channel file
