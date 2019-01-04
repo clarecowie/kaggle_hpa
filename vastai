@@ -1,0 +1,29 @@
+#!/bin/bash
+#!curl https://raw.githubusercontent.com/tcapelle/kaggle_hpa/master/vastai | bash
+conda update conda -y
+conda install anaconda -y
+pip install --upgrade pip
+pip install --user kaggle
+apt-get install nano
+apt-get install unzip
+
+echo export PATH=~/.local/bin:$PATH >> ~/.bashrc
+source ~/.bashrc
+
+conda install -c fastai fastai
+
+git config --global user.email "thomascapelle@gmail.com"
+git config --global user.name “Thomas Capelle”
+
+git clone https://github.com/tcapelle/kaggle_hpa
+
+#Install Google Cloud SDK
+apt-get install lsb-release
+export CLOUD_SDK_REPO="cloud-sdk-$(lsb_release -c -s)"
+echo "deb http://packages.cloud.google.com/apt $CLOUD_SDK_REPO main" | tee -a /etc/apt/sources.list.d/google-cloud-sdk.list
+
+# Import the Google Cloud Platform public key
+curl https://packages.cloud.google.com/apt/doc/apt-key.gpg | apt-key add -
+
+# Update the package list and install the Cloud SDK
+apt-get update && apt-get install google-cloud-sdk
