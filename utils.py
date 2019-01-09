@@ -40,27 +40,35 @@ def f1(y_pred, y_true, thresh:float=0.5, beta:float=1, eps:float=1e-9, sigmoid:b
     res = (prec*rec)/(prec*beta2+rec+eps)*(1+beta2)
     return res.mean()
 
-def f1_np(y_pred, y_true, threshold=0.5):
-    y_pred = (y_pred>threshold).astype(int)
+def f1_np(y_pred, y_true, thresh=0.5):
+    y_pred = (y_pred>thresh).astype(int)
     TP = (y_pred*y_true).sum(0)
-    prec = TP/(y_pred.sum(0)+1e-7)
-    rec = TP/(y_true.sum(0)+1e-7)
-    res = 2*prec*rec/(prec+rec+1e-7)
+    prec = TP/(y_pred.sum(0)+1e-9)
+    rec = TP/(y_true.sum(0)+1e-9)
+    res = 2*prec*rec/(prec+rec+1e-9)
     return res.mean()
 
 def f1_n(y_pred, y_true, thresh, n, default=0.5):
-    threshold = default * np.ones(y_pred.shape[1])
-    threshold[n]=thresh
-    return f1_np(y_pred, y_true, threshold)
+    i_th = default * np.ones(y_pred.shape[1])
+    i_th[n]=thresh
+    return f1_np(y_pred, y_true, i_th)
 
 def find_thresh(y_pred, y_true):
+    print(f'initial f1 = {f1(y_pred, y_true, 0.4)}' )
+    return find_thresh_np(to_np(y_pred.sigmoid()), to_np(y_true))
+
+def find_thresh_np(y_pred, y_true):
     ths = []
     for i in range(y_pred.shape[1]):
         aux = []
-        for th in np.linspace(0,1,100):
+        for th in np.linspace(0,1,200):
             aux += [f1_n(y_pred, y_true, th, i)]
-        ths += [np.array(aux).argmax()/100]
-    return np.array(ths)
+        value = np.array(aux).argmax()/200
+        print(f'class: {i} --> {value}')
+        ths += [value]
+    final_score = f1_np(y_pred, y_true, np.array(ths))
+    print(f'final f1 = {final_score}')
+    return np.array(ths), final_score
 
 ####################################################
 ##### This is focal loss class for multi class #####
